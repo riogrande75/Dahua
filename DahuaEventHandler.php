@@ -329,8 +329,12 @@ class Dahua_Functions
 		}
 	}
 	elseif($eventCode == 'AccessControl'){
-		#Method: 4=Remote/WebIf,6=FingerPrint; UserID: from VTO FingerprintManager/Room Number;
+		#Method:4=Remote/WebIf/SIPext,6=FingerPrint; UserID: from VTO FingerprintManager/Room Number or SIPext;
 		logging("Event: AccessControl, Name ".$eventData['Name']." Method ".$eventData['Method'].", ReaderID ".$eventData['ReaderID'].", UserID ".$eventData['UserID']);
+		if($debug) print_r($eventList);
+		}
+	elseif($eventCode == 'CallSnap'){
+		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']);
 		if($debug) print_r($eventList);
 		}
 	else{
