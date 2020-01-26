@@ -132,8 +132,8 @@ class Dahua_Functions
             return "";
         }
 
-        $LEN_RECVED = 0;
-        $LEN_EXPECT = 0;
+        $LEN_RECVED = 1;
+        $LEN_EXPECT = 1;
         while (strlen($data)>0){
             if (substr($data,0,8) == pack("J",0x2000000044484950)){ # DHIP
                 $P2P_header = substr($data,0,32);
