@@ -340,6 +340,9 @@ class Dahua_Functions
 	elseif($eventCode == 'Invite'){
 		logging("Event: Invite,  Action ".$eventData['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
 		}
+    	elseif($eventCode == 'AccessSnap'){
+		logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
+		}
 	else{
 		logging("Unknown event received");
 		if($debug) var_dump($data);
