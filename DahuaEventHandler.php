@@ -337,6 +337,9 @@ class Dahua_Functions
 		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']);
 		if($debug) print_r($eventList);
 		}
+	elseif($eventCode == 'Invite'){
+		logging("Event: Invite,  Action ".$eventData['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
+		}
 	else{
 		logging("Unknown event received");
 		if($debug) var_dump($data);
