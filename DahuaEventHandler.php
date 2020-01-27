@@ -338,10 +338,19 @@ class Dahua_Functions
 		if($debug) print_r($eventList);
 		}
 	elseif($eventCode == 'Invite'){
-		logging("Event: Invite,  Action ".$eventData['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
+		logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
 		}
     	elseif($eventCode == 'AccessSnap'){
 		logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
+		}
+	elseif($eventCode == 'RequestCallState'){
+		logging("Event: RequestCallState,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+		}
+	elseif($eventCode == 'PassiveHungup'){
+		logging("Event: PassiveHungup,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+		}
+	elseif($eventCode == 'ProfileAlarmTransmit'){
+		logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
 		}
 	else{
 		logging("Unknown event received");
