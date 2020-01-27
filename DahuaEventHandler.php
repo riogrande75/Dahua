@@ -337,7 +337,7 @@ class Dahua_Functions
 		if($debug) print_r($eventList);
 		}
 	elseif($eventCode == 'CallSnap'){
-		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']." CallStatus ".$eventData['ChannelS$
+		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']." CallStatus ".$eventData['ChannelStates'][0]);
                 }
         elseif($eventCode == 'Invite'){
                 logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
