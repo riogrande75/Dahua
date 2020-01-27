@@ -273,42 +273,44 @@ class Dahua_Functions
 		logging("Event VTH answered call from VTO");
 	}
 	elseif($eventCode == 'VideoMotion'){
-		logging("Event VideoMotion");
-	}
-	elseif($eventCode == 'RtspSessionDisconnect'){
-		if($eventList['Action'] == 'Start'){
-			logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." disconnected");
-		}
-		elseif($eventList['Action'] == 'Stop'){
-			logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." connected");
-		}
-	}
-	elseif($eventCode == 'BackKeyLight'){
-		logging("Event BackKeyLight with State ".$eventData['State']." ");
-	}
-	elseif($eventCode == 'TimeChange'){
-		logging("Event TimeChange, BeforeModifyTime: ".$eventData['BeforeModifyTime'].", ModifiedTime: ".$eventData['ModifiedTime']."");
-	}
-	elseif($eventCode == 'NTPAdjustTime'){
-		logging("Event NTPAdjustTime with ".$eventData['Address'].", Result ".$eventData['result']."");
-	}
-	elseif($eventCode == 'KeepLightOn'){
-		if($eventData['Status'] == 'On'){
-			logging("Event KeepLightOn");
-		}
-		elseif($eventData['Status'] == 'Off'){
-			logging("Event KeepLightOff");
-		}
-	}
-	elseif($eventCode == 'VideoBlind'){
-		if($eventList['Action'] == 'Start'){
-			logging("Event VideoBlind started");
-		}
-		elseif($eventList['Action'] == 'Stop'){
-			logging("Event VideoBlind stopped");
-		}
-	}
-	elseif($eventCode == 'FingerPrintCheck'){
+                logging("Event VideoMotion");
+                $this->SaveSnapshot();
+        }
+        elseif($eventCode == 'RtspSessionDisconnect'){
+                if($eventList['Action'] == 'Start'){
+                        logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." disconnected");
+                }
+                elseif($eventList['Action'] == 'Stop'){
+                        logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." connected");
+                }
+        }
+        elseif($eventCode == 'BackKeyLight'){
+                logging("Event BackKeyLight with State ".$eventData['State']." ");
+        }
+        elseif($eventCode == 'TimeChange'){
+                logging("Event TimeChange, BeforeModifyTime: ".$eventData['BeforeModifyTime'].", ModifiedTime: ".$eventData['ModifiedTime']."");
+        }
+        elseif($eventCode == 'NTPAdjustTime'){
+                if($eventData['result']) logging("Event NTPAdjustTime with ".$eventData['Address']." success");
+                        else  logging("Event NTPAdjustTime failed");
+        }
+        elseif($eventCode == 'KeepLightOn'){
+                if($eventData['Status'] == 'On'){
+                        logging("Event KeepLightOn");
+                }
+                elseif($eventData['Status'] == 'Off'){
+                        logging("Event KeepLightOff");
+                }
+        }
+        elseif($eventCode == 'VideoBlind'){
+                if($eventList['Action'] == 'Start'){
+                        logging("Event VideoBlind started");
+                }
+                elseif($eventList['Action'] == 'Stop'){
+                        logging("Event VideoBlind stopped");
+                }
+        }
+ 	elseif($eventCode == 'FingerPrintCheck'){
 		if($eventData['FingerPrintID'] > -1){
 		$finger=($eventData['FingerPrintID']);
 		$users = array( #From VTO FingerprintManager/FingerprintID
@@ -324,39 +326,56 @@ class Dahua_Functions
 		}
 	}
 	elseif($eventCode == 'SIPRegisterResult'){
-		if($eventList['Action'] == 'Pulse'){
-		logging("Event SIPRegisterResult");
-		}
-	}
-	elseif($eventCode == 'AccessControl'){
+                if($eventList['Action'] == 'Pulse'){
+                if($eventData['Success']) logging("Event SIPRegisterResult, Success");
+                        else  logging("Event SIPRegisterResult, Failed)");
+                }
+        }
+    	elseif($eventCode == 'AccessControl'){
 		#Method:4=Remote/WebIf/SIPext,6=FingerPrint; UserID: from VTO FingerprintManager/Room Number or SIPext;
 		logging("Event: AccessControl, Name ".$eventData['Name']." Method ".$eventData['Method'].", ReaderID ".$eventData['ReaderID'].", UserID ".$eventData['UserID']);
 		if($debug) print_r($eventList);
 		}
 	elseif($eventCode == 'CallSnap'){
-		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']);
-		if($debug) print_r($eventList);
-		}
-	elseif($eventCode == 'Invite'){
-		logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
-		}
-    	elseif($eventCode == 'AccessSnap'){
-		logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
-		}
-	elseif($eventCode == 'RequestCallState'){
-		logging("Event: RequestCallState,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
-		}
-	elseif($eventCode == 'PassiveHungup'){
-		logging("Event: PassiveHungup,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
-		}
-	elseif($eventCode == 'ProfileAlarmTransmit'){
-		logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
-		}
-	else{
-		logging("Unknown event received");
-		if($debug) var_dump($data);
-	}
-	return true;
+		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']." CallStatus ".$eventData['ChannelS$
+                }
+        elseif($eventCode == 'Invite'){
+                logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
+                }
+        elseif($eventCode == 'AccessSnap'){
+                logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
+                }
+        elseif($eventCode == 'RequestCallState'){
+                logging("Event: RequestCallState,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+                }
+        elseif($eventCode == 'PassiveHungup'){
+                logging("Event: PassiveHungup,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+                }
+        elseif($eventCode == 'ProfileAlarmTransmit'){
+                logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventD$
+                }
+        else{
+                logging("Unknown event received");
+                if($debug) var_dump($data);
+        }
+        return true;
+        }
+ 	function SaveSnapshot($path="/tmp/")
+	{
+	$filename = $path."/DoorBell_".date("Y-m-d_H-i-s").".jpg";
+	$fp = fopen($filename, 'wb');
+	$url = "http://".$this->host."/cgi-bin/snapshot.cgi";
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+	curl_setopt($ch, CURLOPT_USERPWD, $this->username . ":" . $this->password);
+	curl_setopt($ch, CURLOPT_FILE, $fp);
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_HTTPGET, 1);
+	curl_exec($ch);
+	curl_close($ch);
+	fclose($fp);
+	copy($filename, $path."/Doorbell.jpg");
 	}
 }
 ?>
