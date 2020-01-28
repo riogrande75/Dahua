@@ -1,5 +1,5 @@
 <?PHP
-$debug = false;
+$debug = true;
 echo "<** Dahua VTO Eventempfaenger START **>\n";
 $Dahua = new Dahua_Functions("192.168.1.208", "admin", "password"); # VTO's IP and user/pwd
 $status = $Dahua->Main();
@@ -79,7 +79,8 @@ class Dahua_Functions
         if (empty($packet)){
             $packet = '';
         }
-        $header = pack("J",0x2000000044484950);
+        $header = pack("N",0x20000000);
+        $header .= pack("N",0x44484950);
         $header .= pack("V",$this->SessionID);
         $header .= pack("V",$this->ID);
         $header .= pack("V",strlen($packet));
@@ -135,15 +136,17 @@ class Dahua_Functions
         $LEN_RECVED = 1;
         $LEN_EXPECT = 1;
         while (strlen($data)>0){
-            if (substr($data,0,8) == pack("J",0x2000000044484950)){ # DHIP
+            if (substr($data,0,8) == pack("N",0x20000000).pack("N",0x44484950)){ # DHIP
                 $P2P_header = substr($data,0,32);
                 $LEN_RECVED = unpack("V",substr($data,16,4))[1];
                 $LEN_EXPECT = unpack("V",substr($data,24,4))[1];
                 $data = substr($data,32);
             }
             else{
-                $P2P_data = substr($data,0,$LEN_RECVED);
-                $P2P_return_data[] = $P2P_data;
+                if($LEN_RECVED > 1){
+                    $P2P_data = substr($data,0,$LEN_RECVED);
+                    $P2P_return_data[] = $P2P_data;
+                }
                 $data = substr($data,$LEN_RECVED);
                 if ($LEN_RECVED == $LEN_EXPECT && strlen($data)==0){
                     break;
@@ -273,44 +276,44 @@ class Dahua_Functions
 		logging("Event VTH answered call from VTO");
 	}
 	elseif($eventCode == 'VideoMotion'){
-                logging("Event VideoMotion");
-                $this->SaveSnapshot();
-        }
-        elseif($eventCode == 'RtspSessionDisconnect'){
-                if($eventList['Action'] == 'Start'){
-                        logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." disconnected");
-                }
-                elseif($eventList['Action'] == 'Stop'){
-                        logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." connected");
-                }
-        }
-        elseif($eventCode == 'BackKeyLight'){
-                logging("Event BackKeyLight with State ".$eventData['State']." ");
-        }
-        elseif($eventCode == 'TimeChange'){
-                logging("Event TimeChange, BeforeModifyTime: ".$eventData['BeforeModifyTime'].", ModifiedTime: ".$eventData['ModifiedTime']."");
-        }
-        elseif($eventCode == 'NTPAdjustTime'){
+		logging("Event VideoMotion");
+		$this->SaveSnapshot();
+	}
+	elseif($eventCode == 'RtspSessionDisconnect'){
+		if($eventList['Action'] == 'Start'){
+			logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." disconnected");
+		}
+		elseif($eventList['Action'] == 'Stop'){
+			logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." connected");
+		}
+	}
+	elseif($eventCode == 'BackKeyLight'){
+		logging("Event BackKeyLight with State ".$eventData['State']." ");
+	}
+	elseif($eventCode == 'TimeChange'){
+		logging("Event TimeChange, BeforeModifyTime: ".$eventData['BeforeModifyTime'].", ModifiedTime: ".$eventData['ModifiedTime']."");
+	}
+	elseif($eventCode == 'NTPAdjustTime'){
                 if($eventData['result']) logging("Event NTPAdjustTime with ".$eventData['Address']." success");
                         else  logging("Event NTPAdjustTime failed");
-        }
-        elseif($eventCode == 'KeepLightOn'){
-                if($eventData['Status'] == 'On'){
-                        logging("Event KeepLightOn");
-                }
-                elseif($eventData['Status'] == 'Off'){
-                        logging("Event KeepLightOff");
-                }
-        }
-        elseif($eventCode == 'VideoBlind'){
-                if($eventList['Action'] == 'Start'){
-                        logging("Event VideoBlind started");
-                }
-                elseif($eventList['Action'] == 'Stop'){
-                        logging("Event VideoBlind stopped");
-                }
-        }
- 	elseif($eventCode == 'FingerPrintCheck'){
+	}
+	elseif($eventCode == 'KeepLightOn'){
+		if($eventData['Status'] == 'On'){
+			logging("Event KeepLightOn");
+		}
+		elseif($eventData['Status'] == 'Off'){
+			logging("Event KeepLightOff");
+		}
+	}
+	elseif($eventCode == 'VideoBlind'){
+		if($eventList['Action'] == 'Start'){
+			logging("Event VideoBlind started");
+		}
+		elseif($eventList['Action'] == 'Stop'){
+			logging("Event VideoBlind stopped");
+		}
+	}
+	elseif($eventCode == 'FingerPrintCheck'){
 		if($eventData['FingerPrintID'] > -1){
 		$finger=($eventData['FingerPrintID']);
 		$users = array( #From VTO FingerprintManager/FingerprintID
@@ -326,41 +329,40 @@ class Dahua_Functions
 		}
 	}
 	elseif($eventCode == 'SIPRegisterResult'){
-                if($eventList['Action'] == 'Pulse'){
-                if($eventData['Success']) logging("Event SIPRegisterResult, Success");
-                        else  logging("Event SIPRegisterResult, Failed)");
-                }
-        }
-    	elseif($eventCode == 'AccessControl'){
+		if($eventList['Action'] == 'Pulse'){
+		if($eventData['Success']) logging("Event SIPRegisterResult, Success");
+			else  logging("Event SIPRegisterResult, Failed)");
+		}
+	}
+	elseif($eventCode == 'AccessControl'){
 		#Method:4=Remote/WebIf/SIPext,6=FingerPrint; UserID: from VTO FingerprintManager/Room Number or SIPext;
 		logging("Event: AccessControl, Name ".$eventData['Name']." Method ".$eventData['Method'].", ReaderID ".$eventData['ReaderID'].", UserID ".$eventData['UserID']);
-		if($debug) print_r($eventList);
 		}
 	elseif($eventCode == 'CallSnap'){
 		logging("Event: CallSnap, DeviceType ".$eventData['DeviceType']." RemoteID ".$eventData['RemoteID'].", RemoteIP ".$eventData['RemoteIP']." CallStatus ".$eventData['ChannelStates'][0]);
-                }
-        elseif($eventCode == 'Invite'){
-                logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
-                }
-        elseif($eventCode == 'AccessSnap'){
-                logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
-                }
-        elseif($eventCode == 'RequestCallState'){
-                logging("Event: RequestCallState,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
-                }
-        elseif($eventCode == 'PassiveHungup'){
-                logging("Event: PassiveHungup,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
-                }
-        elseif($eventCode == 'ProfileAlarmTransmit'){
-                logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
-                }
-        else{
-                logging("Unknown event received");
-                if($debug) var_dump($data);
-        }
-        return true;
-        }
- 	function SaveSnapshot($path="/tmp/")
+		}
+	elseif($eventCode == 'Invite'){
+		logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
+		}
+    	elseif($eventCode == 'AccessSnap'){
+		logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
+		}
+	elseif($eventCode == 'RequestCallState'){
+		logging("Event: RequestCallState,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+		}
+	elseif($eventCode == 'PassiveHungup'){
+		logging("Event: PassiveHungup,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+		}
+	elseif($eventCode == 'ProfileAlarmTransmit'){
+		logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
+		}
+	else{
+		logging("Unknown event received");
+		if($debug) var_dump($data);
+	}
+	return true;
+	}
+	function SaveSnapshot($path="/tmp/")
 	{
 	$filename = $path."/DoorBell_".date("Y-m-d_H-i-s").".jpg";
 	$fp = fopen($filename, 'wb');
