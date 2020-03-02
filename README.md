@@ -19,7 +19,6 @@ MQTT_BROKER_HOST: 		MQTT Broker hostname or IP
 MQTT_BROKER_PORT: 		MQTT Broker port, default=1883
 MQTT_BROKER_USERNAME: 	MQTT Broker username
 MQTT_BROKER_PASSWORD: 	MQTT Broker password
-MQTT_BROKER_TOPIC: 		Topic to publish all events, default=DahuaVTO/Events
 ```
 
 ## Run manually
