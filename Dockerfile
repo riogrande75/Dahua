@@ -15,4 +15,4 @@ ENV MQTT_BROKER_USERNAME=Username
 ENV MQTT_BROKER_PASSWORD=Password
 ENV MQTT_BROKER_TOPIC=DahuaVTO/Events
 
-CMD ["php" "-f" "/app/DahuaVTO.php"]
+CMD php -f /app/DahuaVTO.php
