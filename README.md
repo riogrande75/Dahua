@@ -124,21 +124,6 @@ ProfileAlarmTransmit: Alarm triggered
 #### Structure
 ```
 {
-	"id":2,
-	"method":"client.notifyEventStream",
-	"params":{
-		"SID":513,
-		"eventList":[
-			{
-				"Action":"Pulse",
-				"Code":"TimeChange",
-				"Data":{
-					"BeforeModifyTime":"02-03-2020 15:11:39",
-					"LocaleTime":"2020-03-02 15:11:39",
-					"ModifiedTime":"02-03-2020 15:11:38",
-					"UTC":1583154699},"Index":0}]},"session":2147388684}
-
-{
 	"id": [MESSAGE ID],
 	"method":"client.notifyEventStream",
 	"params":{
