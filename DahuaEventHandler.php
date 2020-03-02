@@ -37,30 +37,32 @@ class DahuaVTOEventListener {
         return $RANDOM_HASH;
     }
 	
-	function publish($data){
+	function publish($name, $payload){
 		$server = getenv("MQTT_BROKER_HOST");
 		$port = getenv("MQTT_BROKER_PORT");
 		$username = getenv("MQTT_BROKER_USERNAME");
 		$password = getenv("MQTT_BROKER_PASSWORD");
 		$client_id = "dahua-vto";
 
-		$mqtt_message = json_encode($data);
+		$mqtt_message = json_encode($payload);
+		$topic = "DahuaVTO/".$name."/Event";
+		$log_message = "Topic: ".$topic.", Payload: ".$mqtt_message;
 		
 		try {
 			$mqtt = new phpMQTT($server, $port, $client_id);
 			
             if ($mqtt->connect(true, NULL, $username, $password)) {
-				$mqtt->publish(getenv("MQTT_BROKER_TOPIC"), $mqtt_message, 0);
+				$mqtt->publish($topic, $mqtt_message, 0);
 				$mqtt->close();
 				
-				logging("Published message".$mqtt_message);
+				logging("MQTT message published, ".$log_message);
 				
 			} else {
-				logging("Publishing message failed due to timeout, Message: ".$mqtt_message);
+				logging("Failed to publish MQTT message due to timeout, ".$log_message);
 			}
         } 
 		catch (Exception $e) {
-			logging("Publishing message failed due to error: ".$e.", Message: ".$mqtt_message);
+			logging("Failed to publish MQTT message due to error: ".$e.", ".$log_message);
         }
 	}
 	
@@ -320,17 +322,36 @@ class DahuaVTOEventListener {
         }
     }
 	
-    function EventHandler($data) {
-		global $debug;
+	function EventHandler($data){
+		$allEvents = $data['params']['eventList'];
 		
-		$eventList = $data['params']['eventList'][0];
-		$eventCode = $eventList['Code'];
-		$eventData = $eventList['Data'];
-		
-		if(count($data['params']['eventList'])>1){
+		if(count($allEvents) > 1){
 			logging("Event Manager subscription reply");
 		}
-		elseif($eventCode == 'CallNoAnswered'){
+		else {		
+			foreach ($allEvents as $item) {
+				$eventCode = $item['Code'];
+				$eventData = $item['Data'];
+				$eventAction = $item['Action'];
+				
+				$this->SingleEventHandler($eventCode, $eventAction, $eventData);
+				
+				$payload = array(
+					"Action" => $eventAction,
+					"Data" => $eventData
+				);
+				
+				$this->publish($eventCode, $payload);
+			}
+		}
+		
+		return true;
+	}
+	
+    function SingleEventHandler($eventCode, $eventAction, $eventData) {
+		global $debug;
+		
+		if($eventCode == 'CallNoAnswered'){
 			logging("Event Call from VTO");
 		}
 		elseif($eventCode == 'IgnoreInvite'){
@@ -341,10 +362,10 @@ class DahuaVTOEventListener {
 			//$this->SaveSnapshot();
 		}
 		elseif($eventCode == 'RtspSessionDisconnect'){
-			if($eventList['Action'] == 'Start'){
+			if($eventAction == 'Start'){
 				logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." disconnected");
 			}
-			elseif($eventList['Action'] == 'Stop'){
+			elseif($eventAction == 'Stop'){
 				logging("Event Rtsp-Session from ".str_replace("::ffff:","",$eventData['Device'])." connected");
 			}
 		}
@@ -371,23 +392,24 @@ class DahuaVTOEventListener {
 			}
 		}
 		elseif($eventCode == 'VideoBlind'){
-			if($eventList['Action'] == 'Start'){
+			if($eventAction == 'Start'){
 				logging("Event VideoBlind started");
 			}
-			elseif($eventList['Action'] == 'Stop'){
+			elseif($eventAction == 'Stop'){
 				logging("Event VideoBlind stopped");
 			}
 		}
 		elseif($eventCode == 'FingerPrintCheck'){
 			if($eventData['FingerPrintID'] > -1){
 				$finger=($eventData['FingerPrintID']);
-				$users = array( #From VTO FingerprintManager/FingerprintID
+				/* 
+					$users = array( #From VTO FingerprintManager/FingerprintID
 						"0" => "Papa",
 						"1" => "Mama",
 						"2" => "Kind1",
 						"3" => "Kind2");
 					$name=$users[$finger];
-				
+				*/
 				logging("Event FingerPrintCheck success, Finger number ".$eventData['FingerPrintID'].", User ".$name."");
 			}
 			else {
@@ -395,7 +417,7 @@ class DahuaVTOEventListener {
 			}
 		}
 		elseif($eventCode == 'SIPRegisterResult'){
-			if($eventList['Action'] == 'Pulse'){
+			if($eventAction == 'Pulse'){
 				if($eventData['Success']) {
 					logging("Event SIPRegisterResult, Success");
 				}
@@ -420,17 +442,30 @@ class DahuaVTOEventListener {
 		elseif($eventCode == 'RequestCallState'){
 			logging("Event: RequestCallState,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
 			}
-		elseif($eventCode == 'PassiveHungup'){
-			logging("Event: PassiveHungup,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Index ".$eventData['Index']);
+		elseif($eventCode == 'APConnect'){
+			logging("Event: AlarmLocal");
+		}
+		elseif($eventCode == 'BackLightOn'){
+			logging("Event: BackLightOn");
+		}
+		elseif($eventCode == 'BackLightOff'){
+			logging("Event: BackLightOff");
+		}
+		elseif($eventCode == 'AlarmLocal'){
+			logging("Event: AlarmLocal");
+		}
+		elseif($eventCode == 'APConnect'){
+			logging("Event: APAccess,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']." Result ".$eventData['Result']." Timerconnect ".$eventData['Timerconnect']." Error ".$eventData['Error']);
+		}
+		elseif($eventCode == 'ProfileAlarmTransmit'){
+			logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
 		}
 		elseif($eventCode == 'ProfileAlarmTransmit'){
 			logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
 		}
 		else{
-			logging("Unknown event received");
+			logging("Unmapped event (".$eventCode)."), Please report";
 		}
-		
-		$this->publish($data);
 		
 		return true;
 	}
