@@ -22,7 +22,7 @@ MQTT_BROKER_PASSWORD: 	MQTT Broker password
 MQTT_BROKER_TOPIC: 		Topic to publish all events, default=DahuaVTO/Events
 ```
 
-## Run manuall
+## Run manually
 Requirements:
 * All environment variables above
 * PHP
