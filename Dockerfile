@@ -1,6 +1,4 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
-
+FROM php:7.2.2-apache
 MAINTAINER Elad Bar <elad.bar@hotmail.com>
 
 WORKDIR /app
@@ -13,5 +11,4 @@ apk add --no-cache --virtual .build-dependencies git && \
 chmod +x /app/DahuaVTO.php && \
 apk del .build-dependencies
 
-COPY data/run.sh .
-CMD ./run.sh
+CMD php -f /app/DahuaVTO.php
