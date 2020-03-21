@@ -1,4 +1,6 @@
-FROM php:7.2.2-apache
+ARG BUILD_FROM
+FROM $BUILD_FROM
+
 MAINTAINER Elad Bar <elad.bar@hotmail.com>
 
 WORKDIR /app
@@ -14,4 +16,5 @@ ENV MQTT_BROKER_PORT=1883
 ENV MQTT_BROKER_USERNAME=Username
 ENV MQTT_BROKER_PASSWORD=Password
 
-CMD php -f /app/DahuaVTO.php
+COPY data/run.sh .
+CMD ./run.sh
