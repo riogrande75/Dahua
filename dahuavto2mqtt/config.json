@@ -1,6 +1,6 @@
 {
     "name": "DahuaVTO2MQTT",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "slug": "dahuavto2mqtt",
     "description": "Listens to events from Dahua VTO unit and publishes them via MQTT Message",
     "arch": [
