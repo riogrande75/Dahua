@@ -7,9 +7,9 @@ MAINTAINER Elad Bar <elad.bar@hotmail.com>
 
 WORKDIR /app
 
-COPY DahuaEventHandler.php ./DahuaVTO.php
-COPY phpMQTT.php ./phpMQTT.php
-COPY data/run.sh .
+COPY dahuavto2mqtt/DahuaEventHandler.php ./DahuaVTO.php
+COPY dahuavto2mqtt/phpMQTT.php ./phpMQTT.php
+COPY dahuavto2mqtt/run.sh .
 
 RUN apk add --no-cache --update argon2-libs php php-json && \
 apk add --no-cache --virtual .build-dependencies git && \
