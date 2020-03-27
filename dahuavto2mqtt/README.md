@@ -37,7 +37,8 @@ Add-on configuration:
       "host": "core-mosquitto",
       "port": "1883",
       "username": "homeassistant",
-      "password": "homeassistant"
+      "password": "homeassistant",
+      "topic_prefix": "DahuaVTO"
     }
   }
 ```

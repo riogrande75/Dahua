@@ -1,6 +1,6 @@
 {
     "name": "DahuaVTO2MQTT",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "slug": "dahuavto2mqtt",
     "description": "Listens to events from Dahua VTO unit and publishes them via MQTT Message",
     "arch": [
@@ -22,7 +22,8 @@
         "host": "core-mosquitto",
         "port": "1883",
         "username": "homeassistant",
-        "password": "homeassistant"
+        "password": "homeassistant",
+        "topic_prefix": "DahuaVTO"
       }
     },
     "schema": {
@@ -35,7 +36,8 @@
         "host": "str?",
         "port": "int?",
         "username": "str?",
-        "password": "str?"
+        "password": "str?",
+        "topic_prefix": "str?"
       }
     }
 } 
