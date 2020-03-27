@@ -1,7 +1,7 @@
 {
     "name": "DahuaVTO2MQTT",
     "version": "1.0.1",
-    "slug": "dahua_mqtt",
+    "slug": "dahuavto2mqtt",
     "description": "Listens to events from Dahua VTO unit and publishes them via MQTT Message",
     "arch": [
       "armhf",
@@ -37,6 +37,5 @@
         "username": "str?",
         "password": "str?"
       }
-    },
-    "image": "eladbar/{arch}-addon-dahuavto2mqtt"
+    }
   } 
