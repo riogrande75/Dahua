@@ -37,5 +37,6 @@
         "username": "str?",
         "password": "str?"
       }
-    }
+    },
+	"image": "eladbar/{arch}-hassio-addon-dahuavto2mqtt"
   } 
