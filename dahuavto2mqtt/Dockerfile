@@ -15,6 +15,6 @@ apk del .build-dependencies
 
 WORKDIR /app
 
-COPY run.sh .
+COPY run.sh /app/run.sh
 
-CMD ./run.sh
+CMD /app/run.sh
