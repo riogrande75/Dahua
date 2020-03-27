@@ -1,6 +1,6 @@
-# Hass.io Add-on: Dahua Intercom to MQTT Gateway
+# Hass.io Add-on: Dahua VTO to MQTT Broker
 
-Sends Dahua Intercome events to the MQTT Gateway
+Sends Dahua Intercom events to the MQTT Broker
 
 ![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield] ![Supports armhf Architecture][armhf-shield] ![Supports armv7 Architecture][armv7-shield] ![Supports i386 Architecture][i386-shield]
 
@@ -15,11 +15,11 @@ The installation of this add-on is straightforward and easy to do.
 
 ## How to use
 
-To use this add-on, you need to supply the config for your intercom and MQTT gateway
+To use this add-on, you need to supply the config for your intercom and MQTT Broker
 
 - Requires you to use one of the supported Dahua Intercoms
 - Requires you to run a local MQTT server
-- [MQTT Event's][mqtt-events]
+- [DahuaVTO2MQTT's documentation][documentation]
 
 
 ## Configuration
@@ -70,4 +70,4 @@ In case you've found a bug, please [open an issue on our GitHub][issue].
 [source]: https://github.com/elad-bar/Dahua/tree/master
 [original-author]: https://github.com/riogrande75/Dahua
 [original-addon-author]: https://github.com/troykelly/
-[mqtt-events]: https://github.com/elad-bar/Hassio-addons/blob/master/dahuavto2mqtt/Events.md
+[documentation]: https://github.com/elad-bar/DahuaVTO2MQTT

@@ -4,16 +4,17 @@ FROM ${BUILD_FROM}
 
 ENV LANG C.UTF-8
 
-WORKDIR /app
-
-COPY DahuaEventHandler.php ./DahuaVTO.php
-COPY phpMQTT.php ./phpMQTT.php
-COPY run.sh .
+ARG DAHUA_BRANCH="master"
 
 RUN apk add --no-cache --update argon2-libs php php-json && \
 apk add --no-cache --virtual .build-dependencies git && \
+git clone https://github.com/elad-bar/DahuaVTO2MQTT.git --branch ${DAHUA_BRANCH} --depth 1 /app && \
+mv /app/DahuaEventHandler.php /app/DahuaVTO.php && \
 chmod +x /app/DahuaVTO.php && \
-chmod +x /app/run.sh && \
 apk del .build-dependencies
+
+WORKDIR /app
+
+COPY run.sh .
 
 CMD ./run.sh
