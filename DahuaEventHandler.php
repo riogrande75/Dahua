@@ -328,6 +328,12 @@ class Dahua_Functions
 			logging("Event FingerPrintCheck failed, unknown Finger");
 		}
 	}
+	//Missing DoorCard event #2
+	elseif($eventCode == 'DoorCard'){
+		if($eventList['Action'] == 'Pulse'){
+		$cardno=($eventData['Number']);
+		logging("DoorCard ".$cardno." was used at door");
+	}
 	elseif($eventCode == 'SIPRegisterResult'){
 		if($eventList['Action'] == 'Pulse'){
 		if($eventData['Success']) logging("Event SIPRegisterResult, Success");
