@@ -1,6 +1,6 @@
 <?PHP
 $debug = true;
-echo "<** Dahua VTO Clear MissedCall Log **>\n";
+echo "<** Dahua VTH Clear MissedCall Log **>\n";
 $Dahua = new Dahua_Functions("192.168.180.225", "admin", "123456"); # VTO's IP and user/pwd
 $status = $Dahua->Main();
 logging("All done");
