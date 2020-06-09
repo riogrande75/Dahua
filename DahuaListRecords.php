@@ -189,59 +189,6 @@ class Dahua_Functions
         if (!$this->Login()){
             return;
         }
-/*        $query_args = array(
-                    'id'=>$this->ID,
-                    'magic'=>"0x1234",
-                    'method'=>"RecordFinder.getQuerySize",
-                    'params'=>array(
-                        'log.clear'=>"0" //oder "hc"
-                        ),
-                    'session'=>$this->SessionID);
-*/
-
-/*
-    "params": {
-        "method": [
-            "RecordFinder.factory.create",
-            "RecordFinder.destroy",
-            "RecordFinder.startFind",
-            "RecordFinder.doFind",
-            "RecordFinder.stopFind",
-            "RecordFinder.getQuerySize",
-            "RecordFinder.doSeekFind",
-            "RecordFinder.listMethod"
-        ]
-
-RecordUpdater
-{
-"params": {
-"method": [
-"RecordUpdater.factory.instance",
-"RecordUpdater.destroy",
-"RecordUpdater.import",
-"RecordUpdater.insert",
-"RecordUpdater.insertEx",
-"RecordUpdater.get",
-"RecordUpdater.getEx",
-"RecordUpdater.update",
-"RecordUpdater.updateEx",
-"RecordUpdater.remove",
-"RecordUpdater.removeEx",
-"RecordUpdater.clear",
-"RecordUpdater.importFile",
-"RecordUpdater.exportFile",
-"RecordUpdater.attach",
-"RecordUpdater.detach",
-"RecordUpdater.listMethod",
-"RecordUpdater.getFileImportState",
-"RecordUpdater.getFileExportState",
-"RecordUpdater.getFileImportData",
-"RecordUpdater.exportAsyncFile",
-"RecordUpdater.getSchema",
-"RecordUpdater.importFileEncrypt",
-"RecordUpdater.exportFileEncrypt"
-*/
-
         $query_args = array(
                     'id'=>$this->ID,
                     'magic'=>"0x1234",
@@ -257,9 +204,8 @@ RecordUpdater
 		return false;
 	}
 	$data = json_decode($data[0], true);
-	print_r($data); //new SessionID for listMethod
+	print_r($data);
 	$findtoken = $data['result'];
-        //StartFind starten
 	$query_args = array(
 		'id'=>$this->ID,
 		'magic'=>"0x1234",
@@ -269,15 +215,13 @@ RecordUpdater
                         'condition'=>null
                         ),
                     'session'=>$this->SessionID);
-	$this->Send(json_encode($query_args)); //sende startFind
+	$this->Send(json_encode($query_args)); 
 	$data = $this->Receive();
 	if (empty($data)){
                 logging("Nix Empfangen2");
                 return false;
         }
         $data = json_decode($data[0], true);
-//        print_r($data); //new SessionID for listMethod
-        //doFind starten
         $query_args = array(
                 'id'=>$this->ID,
                 'magic'=>"0x1234",
@@ -287,7 +231,6 @@ RecordUpdater
                         'count'=>3 //Wie viele Anrufe sollen angezeigt werden
                         ),
                     'session'=>$this->SessionID);
-        //
         $this->Send(json_encode($query_args));
         $data = $this->Receive();
         if (empty($data)){
@@ -296,8 +239,6 @@ RecordUpdater
         }
         $data = json_decode($data[0], true);
         print_r($data); //new SessionID for listMethod
-
-
 	}
 }
 ?>
