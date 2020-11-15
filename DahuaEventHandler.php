@@ -385,5 +385,4 @@ class Dahua_Functions
 	fclose($fp);
 	copy($filename, $path."/Doorbell.jpg");
 	}
-}
 ?>
