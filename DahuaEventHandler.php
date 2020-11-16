@@ -331,8 +331,9 @@ class Dahua_Functions
 	//Missing DoorCard event #2
 	elseif($eventCode == 'DoorCard'){
 		if($eventList['Action'] == 'Pulse'){
-		$cardno=($eventData['Number']);
-		logging("DoorCard ".$cardno." was used at door");
+			$cardno=($eventData['Number']);
+			logging("DoorCard ".$cardno." was used at door");
+		}
 	}
 	elseif($eventCode == 'SIPRegisterResult'){
 		if($eventList['Action'] == 'Pulse'){
