@@ -351,6 +351,9 @@ class Dahua_Functions
 	elseif($eventCode == 'Invite'){
 		logging("Event: Invite,  Action ".$eventList['Action'].", CallID ".$eventData['CallID']." Lock Number ".$eventData['LockNum']);
 		}
+	elseif($eventCode == 'AlarmLocal'){
+		logging("Event: AlarmLocal,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+		}
     	elseif($eventCode == 'AccessSnap'){
 		logging("Event: AccessSnap,  FTP upload to ".$eventData['FtpUrl']);
 		}
