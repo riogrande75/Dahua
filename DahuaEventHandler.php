@@ -366,6 +366,12 @@ class Dahua_Functions
 	elseif($eventCode == 'ProfileAlarmTransmit'){
 		logging("Event: ProfileAlarmTransmit,  Action ".$eventList['Action'].", AlarmType ".$eventData['AlarmType']." DevSrcType ".$eventData['DevSrcType'].", SenseMethod ".$eventData['SenseMethod']);
 		}
+	elseif($eventCode == 'NewFile'){
+		logging("Event: NewFile,  Action ".$eventList['Action'].", File ".$eventData['File'].", Folder ".$eventData['Filter'].", LocaleTime ".$eventData['LocaleTime'].", Index ".$eventData['Index']);
+		}
+	elseif($eventCode == 'UpdateFile'){
+		logging("Event: UpdateFile,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+		}
 	else{
 		logging("Unknown event received");
 		if($debug) var_dump($data);
