@@ -378,6 +378,12 @@ class Dahua_Functions
 	elseif($eventCode == 'SecurityImExport'){
 		logging("Event: SecurityImExport, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime'].", Status ".$eventData['Status']);
 		}
+	elseif($eventCode == 'DGSErrorReport'){
+		logging("Event: DGSErrorReport, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+	}
+	elseif($eventCode == 'Upgrade'){
+		logging("Event: Upgrade, Action ".$eventList['Action'].", with State".$eventData['State'].", LocaleTime ".$eventData['LocaleTime']);
+	}
 	else{
 		logging("Unknown event received");
 		if($debug) var_dump($data);
