@@ -372,6 +372,12 @@ class Dahua_Functions
 	elseif($eventCode == 'UpdateFile'){
 		logging("Event: UpdateFile,  Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
 		}
+	elseif($eventCode == 'Reboot'){
+		logging("Event: Reboot, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+		}
+	elseif($eventCode == 'SecurityImExport'){
+		logging("Event: SecurityImExport, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime'].", Status ".$eventData['Status']);
+		}
 	else{
 		logging("Unknown event received");
 		if($debug) var_dump($data);
