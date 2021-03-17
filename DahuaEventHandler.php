@@ -328,7 +328,6 @@ class Dahua_Functions
 			logging("Event FingerPrintCheck failed, unknown Finger");
 		}
 	}
-	//Missing DoorCard event #2
 	elseif($eventCode == 'DoorCard'){
 		if($eventList['Action'] == 'Pulse'){
 			$cardno=($eventData['Number']);
@@ -383,6 +382,21 @@ class Dahua_Functions
 	}
 	elseif($eventCode == 'Upgrade'){
 		logging("Event: Upgrade, Action ".$eventList['Action'].", with State".$eventData['State'].", LocaleTime ".$eventData['LocaleTime']);
+	}
+	elseif($eventCode == 'SendCard'){
+        	logging("Event: SendCard, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+	}
+	elseif($eventCode == 'AddCard'){
+        	logging("Event: AddCard, Action ".$eventList['Action'].": CardNo".$eventData['CardNo'].", UserID ".$eventData['UserID'].", UserName ".$eventData['UserName'].", CardStatus ".$eventData['CardStatus'].", Doors ".$eventData['Doors']);
+	}
+	elseif($eventCode == 'DoorStatus'){
+        	logging("Event: DoorStatus, Action ".$eventList['Action'].", Status: ".$eventData['Status'].", LocaleTime ".$eventData['LocaleTime']);
+	}
+	elseif($eventCode == 'DoorControl'){
+        	logging("Event: DoorControl, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+	}
+	elseif($eventCode == 'DoorNotClosed'){
+        	logging("Event: DoorNotClosed, Action ".$eventList['Action'].", Name".$eventData['Name'].", LocaleTime ".$eventData['LocaleTime']);
 	}
 	else{
 		logging("Unknown event received");
