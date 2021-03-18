@@ -387,7 +387,7 @@ class Dahua_Functions
         	logging("Event: SendCard, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
 	}
 	elseif($eventCode == 'AddCard'){
-        	logging("Event: AddCard, Action ".$eventList['Action'].": CardNo".$eventData['CardNo'].", UserID ".$eventData['UserID'].", UserName ".$eventData['UserName'].", CardStatus ".$eventData['CardStatus'].", Doors ".$eventData['Doors']);
+		logging("Event: AddCard, Action ".$eventList['Action'].": CardNo ".$eventData['Data'][0]['CardNo'].", UserID ".$eventData['Data'][0]['UserID'].", UserName ".$eventData['Data'][0]['UserName'].", CardStatus ".$eventData['Data'][0]['CardStatus'].", CardType ".$eventData['Data'][0]['CardType'].", Doors: Door 0=".$eventData['Data'][0]['Doors'][0].", Door1=".$eventData['Data'][0]['Doors'][1]);
 	}
 	elseif($eventCode == 'DoorStatus'){
         	logging("Event: DoorStatus, Action ".$eventList['Action'].", Status: ".$eventData['Status'].", LocaleTime ".$eventData['LocaleTime']);
