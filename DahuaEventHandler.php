@@ -398,6 +398,9 @@ class Dahua_Functions
 	elseif($eventCode == 'DoorNotClosed'){
         	logging("Event: DoorNotClosed, Action ".$eventList['Action'].", Name".$eventData['Name'].", LocaleTime ".$eventData['LocaleTime']);
 	}
+	elseif($eventCode == 'NetworkChange'){
+        	logging("Event: NetworkChange, Action ".$eventList['Action'].", LocaleTime ".$eventData['LocaleTime']);
+	}
 	else{
 		logging("Unknown event received");
 		if($debug) var_dump($data);
